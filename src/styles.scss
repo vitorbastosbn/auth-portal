@@ -36,3 +36,19 @@ body {
   height: 100%;
 }
 /* You can add global styles to this file, and also import other style files */
+
+.full-width {
+  width: 100%;
+}
+
+mat-dialog-content form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-top: 8px;
+}
+
+.user-info-label {
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 12px;
+}

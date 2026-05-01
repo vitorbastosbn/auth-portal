@@ -1,0 +1,206 @@
+<div class="page-container">
+  <div class="page-header">
+    <a mat-icon-button routerLink="/client-services" matTooltip="Voltar">
+      <mat-icon>arrow_back</mat-icon>
+    </a>
+    <div class="header-info">
+      @if (clientService()) {
+        <code class="service-code">{{ clientService()!.code }}</code>
+        <h1 class="page-title">{{ clientService()!.name }}</h1>
+        @if (clientService()!.description) {
+          <p class="page-subtitle">{{ clientService()!.description }}</p>
+        }
+      }
+    </div>
+    @if (clientService()) {
+      <span
+        class="status-badge"
+        [class.active]="clientService()!.active"
+        [class.inactive]="!clientService()!.active"
+      >
+        {{ clientService()!.active ? 'Ativo' : 'Inativo' }}
+      </span>
+    }
+  </div>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (error()) {
+    <mat-card appearance="outlined" class="error-card">
+      <mat-card-content>
+        <mat-icon color="warn">error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <mat-tab-group>
+      <!-- ROLES TAB -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">badge</mat-icon>
+          Roles ({{ roles().length }})
+        </ng-template>
+
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <span class="tab-description">Gerencie as roles disponíveis neste serviço</span>
+            <button mat-flat-button (click)="openCreateRoleDialog()">
+              <mat-icon>add</mat-icon>
+              Nova Role
+            </button>
+          </div>
+
+          @if (roles().length === 0) {
+            <div class="empty-state">
+              <mat-icon>badge</mat-icon>
+              <p>Nenhuma role cadastrada</p>
+            </div>
+          } @else {
+            <table mat-table [dataSource]="roles()" class="full-width">
+              <ng-container matColumnDef="code">
+                <th mat-header-cell *matHeaderCellDef>Código</th>
+                <td mat-cell *matCellDef="let row">
+                  <code class="code-chip">{{ row.code }}</code>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef>Descrição</th>
+                <td mat-cell *matCellDef="let row" class="desc-cell">{{ row.description || '—' }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="status-badge" [class.active]="row.active" [class.inactive]="!row.active">
+                    {{ row.active ? 'Ativa' : 'Inativa' }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button matTooltip="Editar" (click)="openEditRoleDialog(row)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Remover" color="warn" (click)="deleteRole(row)">
+                    <mat-icon>delete</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="rolesColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: rolesColumns"></tr>
+            </table>
+          }
+        </div>
+      </mat-tab>
+
+      <!-- USERS TAB -->
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon class="tab-icon">group</mat-icon>
+          Usuários ({{ usersTotalElements() }})
+        </ng-template>
+
+        <div class="tab-content">
+          <div class="tab-toolbar">
+            <span class="tab-description">Gerencie os usuários vinculados a este serviço</span>
+            <div class="toolbar-actions">
+              <button mat-stroked-button (click)="openAssignUserDialog()" matTooltip="Vincular usuário existente pelo ID">
+                <mat-icon>link</mat-icon>
+                Vincular Existente
+              </button>
+              <button mat-flat-button (click)="openRegisterAndAssignDialog()">
+                <mat-icon>person_add</mat-icon>
+                Cadastrar Usuário
+              </button>
+            </div>
+          </div>
+
+          <mat-form-field appearance="outline" class="search-field">
+            <mat-label>Pesquisar usuário</mat-label>
+            <mat-icon matPrefix>search</mat-icon>
+            <input matInput [formControl]="usersSearchControl" placeholder="Nome, e-mail..." />
+            @if (usersSearchControl.value) {
+              <button matSuffix mat-icon-button aria-label="Limpar" (click)="usersSearchControl.setValue('')">
+                <mat-icon>close</mat-icon>
+              </button>
+            }
+          </mat-form-field>
+
+          @if (users().length === 0) {
+            <div class="empty-state">
+              <mat-icon>group</mat-icon>
+              @if (usersSearchControl.value) {
+                <p>Nenhum usuário encontrado para "<strong>{{ usersSearchControl.value }}</strong>".</p>
+              } @else {
+                <p>Nenhum usuário vinculado</p>
+              }
+            </div>
+          } @else {
+            <table mat-table [dataSource]="users()" class="full-width">
+              <ng-container matColumnDef="username">
+                <th mat-header-cell *matHeaderCellDef>Usuário</th>
+                <td mat-cell *matCellDef="let row">{{ row.username }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef>E-mail</th>
+                <td mat-cell *matCellDef="let row" class="desc-cell">{{ row.email }}</td>
+              </ng-container>
+
+              <ng-container matColumnDef="roles">
+                <th mat-header-cell *matHeaderCellDef>Roles</th>
+                <td mat-cell *matCellDef="let row">
+                  <div class="roles-list">
+                    @for (role of row.roles; track role) {
+                      <code class="code-chip small">{{ role }}</code>
+                    }
+                  </div>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="status">
+                <th mat-header-cell *matHeaderCellDef>Status</th>
+                <td mat-cell *matCellDef="let row">
+                  <span class="status-badge" [class.active]="row.active" [class.inactive]="!row.active">
+                    {{ row.active ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="actions">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let row">
+                  <button mat-icon-button matTooltip="Editar roles" (click)="openEditUserDialog(row)">
+                    <mat-icon>edit</mat-icon>
+                  </button>
+                  <button mat-icon-button matTooltip="Remover vínculo" color="warn" (click)="removeUser(row)">
+                    <mat-icon>link_off</mat-icon>
+                  </button>
+                </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="usersColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: usersColumns"></tr>
+            </table>
+
+            <mat-paginator
+              [length]="usersTotalElements()"
+              [pageIndex]="usersPage()"
+              [pageSize]="usersPageSize()"
+              [pageSizeOptions]="[10, 20, 50]"
+              showFirstLastButtons
+              (page)="onUsersPageChange($event)"
+              aria-label="Selecionar página de usuários"
+            />
+          }
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  }
+</div>

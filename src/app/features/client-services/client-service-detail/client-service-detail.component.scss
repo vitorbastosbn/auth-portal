@@ -1,0 +1,146 @@
+.page-container {
+  max-width: 1100px;
+}
+
+.page-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.header-info {
+  flex: 1;
+}
+
+.service-code {
+  font-family: monospace;
+  background: var(--mat-sys-surface-container);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+  color: var(--mat-sys-on-surface-variant);
+  margin-bottom: 4px;
+  display: inline-block;
+}
+
+.page-title {
+  font-size: 26px;
+  font-weight: 600;
+  margin: 4px 0;
+}
+
+.page-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0;
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 64px 0;
+}
+
+.error-card mat-card-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-sys-error);
+}
+
+.tab-content {
+  padding: 24px 0;
+}
+
+.tab-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.toolbar-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.tab-description {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 14px;
+}
+
+.tab-icon {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 48px;
+  gap: 12px;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.full-width {
+  width: 100%;
+}
+
+.code-chip {
+  font-family: monospace;
+  background: var(--mat-sys-surface-container);
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 13px;
+
+  &.small {
+    font-size: 11px;
+    padding: 1px 6px;
+  }
+}
+
+.roles-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.desc-cell {
+  color: var(--mat-sys-on-surface-variant);
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.inactive {
+    background: #fce4ec;
+    color: #c62828;
+  }
+}
+
+.search-field {
+  width: 100%;
+  max-width: 480px;
+  margin-bottom: 16px;
+  display: block;
+}

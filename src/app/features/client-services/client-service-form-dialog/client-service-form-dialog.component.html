@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Serviço' : 'Novo Serviço' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+    @if (!isEdit) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Código</mat-label>
+        <input matInput formControlName="code" placeholder="ex: my-service" />
+        <mat-hint>Apenas letras, números, pontos, hífens e underscores</mat-hint>
+        @if (form.controls.code.hasError('required') && form.controls.code.touched) {
+          <mat-error>Código é obrigatório</mat-error>
+        }
+        @if (form.controls.code.hasError('pattern')) {
+          <mat-error>Código inválido. Use apenas letras, números, pontos, hífens e underscores</mat-error>
+        }
+        @if (form.controls.code.hasError('minlength')) {
+          <mat-error>Mínimo 3 caracteres</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Nome</mat-label>
+      <input matInput formControlName="name" placeholder="Nome do serviço" />
+      @if (form.controls.name.hasError('required') && form.controls.name.touched) {
+        <mat-error>Nome é obrigatório</mat-error>
+      }
+      @if (form.controls.name.hasError('minlength')) {
+        <mat-error>Mínimo 3 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="description" rows="3" placeholder="Descrição opcional"></textarea>
+      @if (form.controls.description.hasError('maxlength')) {
+        <mat-error>Máximo 255 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    @if (isEdit) {
+      <mat-slide-toggle formControlName="active">Serviço ativo</mat-slide-toggle>
+    }
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ isEdit ? 'Salvar' : 'Criar' }}
+    }
+  </button>
+</mat-dialog-actions>

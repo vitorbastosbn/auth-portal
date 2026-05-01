@@ -1,0 +1,61 @@
+<mat-sidenav-container class="shell-container">
+  <mat-sidenav
+    #sidenav
+    [opened]="sidenavOpened()"
+    mode="side"
+    class="shell-sidenav"
+  >
+    <div class="sidenav-header">
+      <mat-icon class="sidenav-logo">admin_panel_settings</mat-icon>
+      <span class="sidenav-title">Auth Portal</span>
+    </div>
+
+    <mat-divider />
+
+    <mat-nav-list>
+      @for (item of navItems; track item.route) {
+        <a
+          mat-list-item
+          [routerLink]="item.route"
+          routerLinkActive="active-link"
+          [routerLinkActiveOptions]="{ exact: false }"
+        >
+          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+          <span matListItemTitle>{{ item.label }}</span>
+        </a>
+      }
+    </mat-nav-list>
+
+    <div class="sidenav-footer">
+      <mat-divider />
+      <div class="user-info">
+        <mat-icon>account_circle</mat-icon>
+        <div class="user-details">
+          <span class="user-name">{{ currentUser()?.username }}</span>
+          <span class="user-role">Administrador</span>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav>
+
+  <mat-sidenav-content>
+    <mat-toolbar class="shell-toolbar" color="primary">
+      <button mat-icon-button (click)="toggleSidenav()" aria-label="Alternar menu">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span class="toolbar-spacer"></span>
+      <button
+        mat-icon-button
+        (click)="logout()"
+        matTooltip="Sair"
+        aria-label="Sair da aplicação"
+      >
+        <mat-icon>logout</mat-icon>
+      </button>
+    </mat-toolbar>
+
+    <main class="shell-content">
+      <router-outlet />
+    </main>
+  </mat-sidenav-content>
+</mat-sidenav-container>

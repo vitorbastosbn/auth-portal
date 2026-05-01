@@ -1,0 +1,130 @@
+<h2 mat-dialog-title>Cadastrar e Vincular Usuário</h2>
+
+<mat-dialog-content>
+  <mat-stepper [linear]="true" orientation="horizontal">
+    <!-- PASSO 1: Cadastro -->
+    <mat-step [completed]="!!createdUser()" label="Cadastrar Usuário">
+      @if (!createdUser()) {
+        <form [formGroup]="registerForm" novalidate class="step-form">
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Usuário</mat-label>
+            <input matInput formControlName="username" placeholder="ex: joao.silva" autocomplete="off" />
+            <mat-hint>Letras, números, pontos, hífens e underscores</mat-hint>
+            @if (registerForm.controls.username.hasError('required') && registerForm.controls.username.touched) {
+              <mat-error>Usuário é obrigatório</mat-error>
+            }
+            @if (registerForm.controls.username.hasError('pattern')) {
+              <mat-error>Formato inválido</mat-error>
+            }
+            @if (registerForm.controls.username.hasError('minlength')) {
+              <mat-error>Mínimo 3 caracteres</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>E-mail</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="email@exemplo.com" autocomplete="off" />
+            @if (registerForm.controls.email.hasError('required') && registerForm.controls.email.touched) {
+              <mat-error>E-mail é obrigatório</mat-error>
+            }
+            @if (registerForm.controls.email.hasError('email')) {
+              <mat-error>E-mail inválido</mat-error>
+            }
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="full-width">
+            <mat-label>Senha inicial</mat-label>
+            <input matInput formControlName="password" type="password" placeholder="Mínimo 8 caracteres" autocomplete="new-password" />
+            @if (registerForm.controls.password.hasError('required') && registerForm.controls.password.touched) {
+              <mat-error>Senha é obrigatória</mat-error>
+            }
+            @if (registerForm.controls.password.hasError('minlength')) {
+              <mat-error>Mínimo 8 caracteres</mat-error>
+            }
+          </mat-form-field>
+
+          @if (registerError()) {
+            <p class="error-msg">
+              <mat-icon>error_outline</mat-icon>
+              {{ registerError() }}
+            </p>
+          }
+
+          <div class="step-actions">
+            <button mat-stroked-button mat-dialog-close type="button">Cancelar</button>
+            <button
+              mat-flat-button
+              type="button"
+              (click)="register()"
+              [disabled]="registerForm.invalid || loadingRegister()"
+            >
+              @if (loadingRegister()) {
+                <mat-spinner diameter="18" />
+              } @else {
+                Cadastrar
+              }
+            </button>
+          </div>
+        </form>
+      } @else {
+        <div class="success-state">
+          <mat-icon class="success-icon">check_circle</mat-icon>
+          <p>Usuário <strong>{{ createdUser()!.username }}</strong> cadastrado com sucesso!</p>
+          <p class="user-detail">ID: <code>{{ createdUser()!.userId }}</code></p>
+        </div>
+      }
+    </mat-step>
+
+    <!-- PASSO 2: Vincular ao Serviço -->
+    <mat-step label="Vincular ao Serviço">
+      <form [formGroup]="assignForm" novalidate class="step-form">
+        @if (createdUser()) {
+          <div class="user-badge">
+            <mat-icon>account_circle</mat-icon>
+            <span>{{ createdUser()!.username }} — {{ createdUser()!.email }}</span>
+          </div>
+        }
+
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Roles</mat-label>
+          <mat-select formControlName="roles" multiple placeholder="Selecione as roles">
+            @for (role of data.availableRoles; track role) {
+              <mat-option [value]="role">{{ role }}</mat-option>
+            }
+          </mat-select>
+          @if (assignForm.controls.roles.hasError('required') && assignForm.controls.roles.touched) {
+            <mat-error>Selecione pelo menos uma role</mat-error>
+          }
+          @if (data.availableRoles.length === 0) {
+            <mat-hint>Nenhuma role disponível. Cadastre roles primeiro.</mat-hint>
+          }
+        </mat-form-field>
+
+        <mat-slide-toggle formControlName="active">Membership ativo</mat-slide-toggle>
+
+        @if (assignError()) {
+          <p class="error-msg">
+            <mat-icon>error_outline</mat-icon>
+            {{ assignError() }}
+          </p>
+        }
+
+        <div class="step-actions">
+          <button mat-stroked-button mat-dialog-close type="button">Cancelar</button>
+          <button
+            mat-flat-button
+            type="button"
+            (click)="assign()"
+            [disabled]="assignForm.invalid || loadingAssign() || !createdUser()"
+          >
+            @if (loadingAssign()) {
+              <mat-spinner diameter="18" />
+            } @else {
+              Vincular
+            }
+          </button>
+        </div>
+      </form>
+    </mat-step>
+  </mat-stepper>
+</mat-dialog-content>

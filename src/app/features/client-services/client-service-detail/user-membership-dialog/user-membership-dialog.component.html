@@ -1,0 +1,44 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Membership' : 'Vincular Usuário' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+    @if (!isEdit) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>ID do Usuário</mat-label>
+        <input matInput formControlName="userId" placeholder="UUID do usuário" />
+        @if (form.controls.userId.hasError('required') && form.controls.userId.touched) {
+          <mat-error>ID do usuário é obrigatório</mat-error>
+        }
+      </mat-form-field>
+    } @else {
+      <p class="user-info-label">
+        Usuário: <strong>{{ data.membership?.username }}</strong> ({{ data.membership?.email }})
+      </p>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Roles</mat-label>
+      <mat-select formControlName="roles" multiple placeholder="Selecione as roles">
+        @for (role of data.availableRoles; track role) {
+          <mat-option [value]="role">{{ role }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.roles.hasError('required') && form.controls.roles.touched) {
+        <mat-error>Selecione pelo menos uma role</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="active">Membership ativo</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ isEdit ? 'Salvar' : 'Vincular' }}
+    }
+  </button>
+</mat-dialog-actions>

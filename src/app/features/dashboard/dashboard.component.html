@@ -1,0 +1,97 @@
+<div class="dashboard-container">
+  <h1 class="page-title">Olá, {{ currentUser()?.username }} 👋</h1>
+  <p class="page-subtitle">Bem-vindo ao painel de administração do Auth Portal.</p>
+
+  @if (loading()) {
+    <div class="loading-center">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (error()) {
+    <mat-card appearance="outlined" class="error-card">
+      <mat-card-content>
+        <mat-icon color="warn">error_outline</mat-icon>
+        <span>{{ error() }}</span>
+      </mat-card-content>
+    </mat-card>
+  } @else {
+    <div class="stats-grid">
+      <mat-card appearance="outlined" class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon-bg total">
+            <mat-icon>api</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ services().length }}</span>
+            <span class="stat-label">Total de Serviços</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon-bg active">
+            <mat-icon>check_circle</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ activeServices }}</span>
+            <span class="stat-label">Serviços Ativos</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+      <mat-card appearance="outlined" class="stat-card">
+        <mat-card-content>
+          <div class="stat-icon-bg inactive">
+            <mat-icon>cancel</mat-icon>
+          </div>
+          <div class="stat-info">
+            <span class="stat-value">{{ inactiveServices }}</span>
+            <span class="stat-label">Serviços Inativos</span>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div class="recent-section">
+      <div class="section-header">
+        <h2>Serviços Recentes</h2>
+        <a mat-stroked-button routerLink="/client-services">
+          <mat-icon>arrow_forward</mat-icon>
+          Ver todos
+        </a>
+      </div>
+
+      @if (services().length === 0) {
+        <mat-card appearance="outlined" class="empty-card">
+          <mat-card-content>
+            <mat-icon>inbox</mat-icon>
+            <p>Nenhum serviço cadastrado.</p>
+            <a mat-flat-button routerLink="/client-services">Cadastrar serviço</a>
+          </mat-card-content>
+        </mat-card>
+      } @else {
+        <div class="services-preview">
+          @for (service of services().slice(0, 5); track service.id) {
+            <mat-card appearance="outlined" class="service-card">
+              <mat-card-content>
+                <div class="service-row">
+                  <div class="service-info">
+                    <span class="service-code">{{ service.code }}</span>
+                    <span class="service-name">{{ service.name }}</span>
+                  </div>
+                  <span
+                    class="status-badge"
+                    [class.active]="service.active"
+                    [class.inactive]="!service.active"
+                  >
+                    {{ service.active ? 'Ativo' : 'Inativo' }}
+                  </span>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          }
+        </div>
+      }
+    </div>
+  }
+</div>

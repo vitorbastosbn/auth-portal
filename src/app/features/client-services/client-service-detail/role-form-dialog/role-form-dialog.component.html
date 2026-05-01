@@ -1,0 +1,37 @@
+<h2 mat-dialog-title>{{ isEdit ? 'Editar Role' : 'Nova Role' }}</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+    @if (!isEdit) {
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Código</mat-label>
+        <input matInput formControlName="code" placeholder="ex: READ_DATA" />
+        <mat-hint>Letras, números, underscores, hífens e dois-pontos</mat-hint>
+        @if (form.controls.code.hasError('required') && form.controls.code.touched) {
+          <mat-error>Código é obrigatório</mat-error>
+        }
+        @if (form.controls.code.hasError('pattern')) {
+          <mat-error>Código inválido</mat-error>
+        }
+      </mat-form-field>
+    }
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="description" rows="2" placeholder="Descrição opcional"></textarea>
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="active">Role ativa</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      <mat-spinner diameter="18" />
+    } @else {
+      {{ isEdit ? 'Salvar' : 'Criar' }}
+    }
+  </button>
+</mat-dialog-actions>

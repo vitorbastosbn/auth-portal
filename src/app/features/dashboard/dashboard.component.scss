@@ -1,0 +1,164 @@
+.dashboard-container {
+  max-width: 1100px;
+}
+
+.page-title {
+  font-size: 28px;
+  font-weight: 600;
+  margin: 0 0 4px;
+}
+
+.page-subtitle {
+  color: var(--mat-sys-on-surface-variant);
+  margin: 0 0 32px;
+}
+
+.loading-center {
+  display: flex;
+  justify-content: center;
+  padding: 64px 0;
+}
+
+.error-card mat-card-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--mat-sys-error);
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.stat-card mat-card-content {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 8px;
+}
+
+.stat-icon-bg {
+  width: 52px;
+  height: 52px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+
+  &.total {
+    background: var(--mat-sys-primary-container);
+    mat-icon { color: var(--mat-sys-on-primary-container); }
+  }
+
+  &.active {
+    background: #e8f5e9;
+    mat-icon { color: #2e7d32; }
+  }
+
+  &.inactive {
+    background: #fce4ec;
+    mat-icon { color: #c62828; }
+  }
+}
+
+.stat-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--mat-sys-on-surface-variant);
+  margin-top: 4px;
+}
+
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+
+  h2 {
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0;
+  }
+}
+
+.empty-card mat-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px;
+  color: var(--mat-sys-on-surface-variant);
+
+  mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+  }
+}
+
+.services-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.service-card mat-card-content {
+  padding: 12px 16px;
+}
+
+.service-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.service-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.service-code {
+  font-size: 12px;
+  color: var(--mat-sys-on-surface-variant);
+  font-family: monospace;
+}
+
+.service-name {
+  font-weight: 500;
+}
+
+.status-badge {
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+
+  &.active {
+    background: #e8f5e9;
+    color: #2e7d32;
+  }
+
+  &.inactive {
+    background: #fce4ec;
+    color: #c62828;
+  }
+}
