@@ -14,103 +14,183 @@
       </mat-card-content>
     </mat-card>
   } @else {
-    <div class="stats-grid">
-      <mat-card appearance="outlined" class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon-bg total">
-            <mat-icon>api</mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-value">{{ services().length }}</span>
-            <span class="stat-label">Total de Serviços</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+    <div class="top-sections">
+      <section class="metrics-section">
+        <div class="section-header">
+          <h2>Visão Geral de Serviços</h2>
+          <a mat-stroked-button routerLink="/client-services">
+            <mat-icon>arrow_forward</mat-icon>
+            Gerenciar serviços
+          </a>
+        </div>
 
-      <mat-card appearance="outlined" class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon-bg active">
-            <mat-icon>check_circle</mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-value">{{ activeServices }}</span>
-            <span class="stat-label">Serviços Ativos</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+        <div class="stats-grid">
+          <mat-card appearance="outlined" class="stat-card">
+            <mat-card-content>
+              <div class="stat-icon-bg total">
+                <mat-icon>api</mat-icon>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ services().length }}</span>
+                <span class="stat-label">Total de Serviços</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
 
-      <mat-card appearance="outlined" class="stat-card">
-        <mat-card-content>
-          <div class="stat-icon-bg inactive">
-            <mat-icon>cancel</mat-icon>
-          </div>
-          <div class="stat-info">
-            <span class="stat-value">{{ inactiveServices }}</span>
-            <span class="stat-label">Serviços Inativos</span>
-          </div>
-        </mat-card-content>
-      </mat-card>
+          <mat-card appearance="outlined" class="stat-card">
+            <mat-card-content>
+              <div class="stat-icon-bg active">
+                <mat-icon>check_circle</mat-icon>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ activeServices }}</span>
+                <span class="stat-label">Serviços Ativos</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card appearance="outlined" class="stat-card">
+            <mat-card-content>
+              <div class="stat-icon-bg inactive">
+                <mat-icon>cancel</mat-icon>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ inactiveServices }}</span>
+                <span class="stat-label">Serviços Inativos</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </section>
+
+      <section class="metrics-section">
+        <div class="section-header">
+          <h2>Visão Geral de Usuários</h2>
+          <a mat-stroked-button routerLink="/users">
+            <mat-icon>arrow_forward</mat-icon>
+            Gerenciar usuários
+          </a>
+        </div>
+
+        <div class="stats-grid">
+          <mat-card appearance="outlined" class="stat-card">
+            <mat-card-content>
+              <div class="stat-icon-bg users-total">
+                <mat-icon>group</mat-icon>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ usersTotalElements() }}</span>
+                <span class="stat-label">Total de Usuários</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card appearance="outlined" class="stat-card">
+            <mat-card-content>
+              <div class="stat-icon-bg users-active">
+                <mat-icon>person_check</mat-icon>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ activeUsers }}</span>
+                <span class="stat-label">Usuários Ativos (página)</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+
+          <mat-card appearance="outlined" class="stat-card">
+            <mat-card-content>
+              <div class="stat-icon-bg users-inactive">
+                <mat-icon>person_off</mat-icon>
+              </div>
+              <div class="stat-info">
+                <span class="stat-value">{{ inactiveUsers }}</span>
+                <span class="stat-label">Usuários Inativos (página)</span>
+              </div>
+            </mat-card-content>
+          </mat-card>
+        </div>
+      </section>
     </div>
 
-    <div class="recent-section">
-      <div class="section-header">
-        <h2>Atalhos de Gestão</h2>
-      </div>
-
-      <div class="quick-actions-grid">
-        <mat-card appearance="outlined" class="quick-action-card" routerLink="/users">
-          <mat-card-content>
-            <div class="quick-action-icon users">
-              <mat-icon>group</mat-icon>
-            </div>
-            <div class="quick-action-info">
-              <span class="quick-action-title">Usuários</span>
-              <span class="quick-action-desc">Editar username, e-mail e status</span>
-            </div>
-            <mat-icon class="quick-action-arrow">arrow_forward</mat-icon>
-          </mat-card-content>
-        </mat-card>
-      </div>
-
-      <div class="section-header">
-        <h2>Serviços Recentes</h2>
-        <a mat-stroked-button routerLink="/client-services">
-          <mat-icon>arrow_forward</mat-icon>
-          Ver todos
-        </a>
-      </div>
-
-      @if (services().length === 0) {
-        <mat-card appearance="outlined" class="empty-card">
-          <mat-card-content>
-            <mat-icon>inbox</mat-icon>
-            <p>Nenhum serviço cadastrado.</p>
-            <a mat-flat-button routerLink="/client-services">Cadastrar serviço</a>
-          </mat-card-content>
-        </mat-card>
-      } @else {
-        <div class="services-preview">
-          @for (service of services().slice(0, 5); track service.id) {
-            <mat-card appearance="outlined" class="service-card">
-              <mat-card-content>
-                <div class="service-row">
-                  <div class="service-info">
-                    <span class="service-code">{{ service.code }}</span>
-                    <span class="service-name">{{ service.name }}</span>
-                  </div>
-                  <span
-                    class="status-badge"
-                    [class.active]="service.active"
-                    [class.inactive]="!service.active"
-                  >
-                    {{ service.active ? 'Ativo' : 'Inativo' }}
-                  </span>
-                </div>
-              </mat-card-content>
-            </mat-card>
-          }
+    <div class="recent-grid">
+      <section class="recent-column">
+        <div class="section-header">
+          <h2>Serviços Recentes</h2>
+          <a mat-stroked-button routerLink="/client-services">
+            <mat-icon>arrow_forward</mat-icon>
+            Ver todos
+          </a>
         </div>
-      }
+
+        @if (services().length === 0) {
+          <mat-card appearance="outlined" class="empty-card">
+            <mat-card-content>
+              <mat-icon>inbox</mat-icon>
+              <p>Nenhum serviço cadastrado.</p>
+              <a mat-flat-button routerLink="/client-services">Cadastrar serviço</a>
+            </mat-card-content>
+          </mat-card>
+        } @else {
+          <div class="services-preview">
+            @for (service of services().slice(0, 5); track service.id) {
+              <mat-card appearance="outlined" class="service-card">
+                <mat-card-content>
+                  <div class="service-row">
+                    <div class="service-info">
+                      <span class="service-code">{{ service.code }}</span>
+                      <span class="service-name">{{ service.name }}</span>
+                    </div>
+                    <span
+                      class="status-badge"
+                      [class.active]="service.active"
+                      [class.inactive]="!service.active"
+                    >
+                      {{ service.active ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        }
+      </section>
+
+      <section class="recent-column">
+        <div class="section-header">
+          <h2>Usuários Recentes</h2>
+          <a mat-stroked-button routerLink="/users">
+            <mat-icon>arrow_forward</mat-icon>
+            Ver todos
+          </a>
+        </div>
+
+        @if (users().length === 0) {
+          <mat-card appearance="outlined" class="empty-card">
+            <mat-card-content>
+              <mat-icon>group_off</mat-icon>
+              <p>Nenhum usuário encontrado.</p>
+            </mat-card-content>
+          </mat-card>
+        } @else {
+          <div class="services-preview">
+            @for (user of users().slice(0, 5); track user.userId) {
+              <mat-card appearance="outlined" class="service-card">
+                <mat-card-content>
+                  <div class="service-row">
+                    <div class="service-info">
+                      <span class="service-name">{{ user.username }}</span>
+                      <span class="service-code">{{ user.email }}</span>
+                    </div>
+                    <span class="status-badge" [class.active]="user.active" [class.inactive]="!user.active">
+                      {{ user.active ? 'Ativo' : 'Inativo' }}
+                    </span>
+                  </div>
+                </mat-card-content>
+              </mat-card>
+            }
+          </div>
+        }
+      </section>
     </div>
   }
 </div>

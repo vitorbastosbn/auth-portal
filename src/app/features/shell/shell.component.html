@@ -5,34 +5,47 @@
     mode="side"
     class="shell-sidenav"
   >
-    <div class="sidenav-header">
-      <mat-icon class="sidenav-logo">admin_panel_settings</mat-icon>
-      <span class="sidenav-title">Auth Portal</span>
-    </div>
+    <div class="sidenav-layout">
+      <div class="sidenav-header">
+        <mat-icon class="sidenav-logo">admin_panel_settings</mat-icon>
+        <span class="sidenav-title">Auth Portal</span>
+      </div>
 
-    <mat-divider />
-
-    <mat-nav-list>
-      @for (item of navItems; track item.route) {
-        <a
-          mat-list-item
-          [routerLink]="item.route"
-          routerLinkActive="active-link"
-          [routerLinkActiveOptions]="{ exact: false }"
-        >
-          <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
-          <span matListItemTitle>{{ item.label }}</span>
-        </a>
-      }
-    </mat-nav-list>
-
-    <div class="sidenav-footer">
       <mat-divider />
-      <div class="user-info">
-        <mat-icon>account_circle</mat-icon>
-        <div class="user-details">
-          <span class="user-name">{{ currentUser()?.username }}</span>
-          <span class="user-role">Administrador</span>
+
+      <mat-nav-list>
+        @for (item of navItems; track item.route) {
+          <a
+            mat-list-item
+            [routerLink]="item.route"
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{ exact: false }"
+          >
+            <mat-icon matListItemIcon>{{ item.icon }}</mat-icon>
+            <span matListItemTitle>{{ item.label }}</span>
+          </a>
+        }
+      </mat-nav-list>
+
+      <div class="sidenav-footer">
+        <mat-divider />
+        <div class="footer-row">
+          <div class="user-info">
+            <mat-icon>account_circle</mat-icon>
+            <div class="user-details">
+              <span class="user-name">{{ currentUser()?.username }}</span>
+              <span class="user-role">Administrador</span>
+            </div>
+          </div>
+          <button
+            mat-icon-button
+            class="logout-btn"
+            (click)="logout()"
+            matTooltip="Sair"
+            aria-label="Sair da aplicação"
+          >
+            <mat-icon>logout</mat-icon>
+          </button>
         </div>
       </div>
     </div>
@@ -42,15 +55,6 @@
     <mat-toolbar class="shell-toolbar" color="primary">
       <button mat-icon-button (click)="toggleSidenav()" aria-label="Alternar menu">
         <mat-icon>menu</mat-icon>
-      </button>
-      <span class="toolbar-spacer"></span>
-      <button
-        mat-icon-button
-        (click)="logout()"
-        matTooltip="Sair"
-        aria-label="Sair da aplicação"
-      >
-        <mat-icon>logout</mat-icon>
       </button>
     </mat-toolbar>
 
