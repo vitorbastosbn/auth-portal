@@ -1,0 +1,43 @@
+<h2 mat-dialog-title>Editar usuário</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="form" novalidate>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Username</mat-label>
+      <input matInput formControlName="username" />
+      @if (form.controls.username.hasError('required') && form.controls.username.touched) {
+        <mat-error>Username é obrigatório</mat-error>
+      }
+      @if (form.controls.username.hasError('minlength') && form.controls.username.touched) {
+        <mat-error>Username deve ter pelo menos 3 caracteres</mat-error>
+      }
+      @if (form.controls.username.hasError('pattern') && form.controls.username.touched) {
+        <mat-error>Use apenas letras, números, ponto, underline ou hífen</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>E-mail</mat-label>
+      <input matInput formControlName="email" />
+      @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+        <mat-error>E-mail é obrigatório</mat-error>
+      }
+      @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+        <mat-error>Informe um e-mail válido</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-slide-toggle formControlName="active">Usuário ativo</mat-slide-toggle>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button (click)="submit()" [disabled]="form.invalid || loading()">
+    @if (loading()) {
+      <mat-spinner diameter="18" />
+    } @else {
+      Salvar
+    }
+  </button>
+</mat-dialog-actions>

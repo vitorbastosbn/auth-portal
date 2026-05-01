@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import {
   AssignUserToClientRequest,
+  AssignableUserListParams,
+  AssignableUserResponse,
   ClientServiceListParams,
   ClientServiceResponse,
   ClientServiceRoleResponse,
@@ -83,11 +85,28 @@ export class ClientServiceService {
     return this.http.get<PageResponse<ClientUserMembershipResponse>>(`${BASE}/${serviceId}/users`, { params: httpParams });
   }
 
+  listAssignableUsers(
+    serviceId: string,
+    params?: AssignableUserListParams,
+  ): Observable<PageResponse<AssignableUserResponse>> {
+    let httpParams = new HttpParams();
+    if (params?.query) httpParams = httpParams.set('query', params.query);
+    if (params?.page !== undefined) httpParams = httpParams.set('page', String(params.page));
+    if (params?.size !== undefined) httpParams = httpParams.set('size', String(params.size));
+    return this.http.get<PageResponse<AssignableUserResponse>>(
+      `${BASE}/${serviceId}/users/available`,
+      { params: httpParams },
+    );
+  }
+
   assignUser(
     serviceId: string,
     payload: AssignUserToClientRequest,
   ): Observable<ClientUserMembershipResponse> {
-    return this.http.post<ClientUserMembershipResponse>(`${BASE}/${serviceId}/users`, payload);
+    return this.http.post<ClientUserMembershipResponse>(
+      `${BASE}/${serviceId}/users/assignments`,
+      payload,
+    );
   }
 
   updateUserMembership(

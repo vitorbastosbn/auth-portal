@@ -1,7 +1,13 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { RegisterRequest } from '../models/auth.models';
+import {
+  AdminUserListParams,
+  AdminUserResponse,
+  UpdateAdminUserRequest,
+} from '../models/admin-user.models';
+import { PageResponse } from '../models/client-service.models';
 
 export interface CreatedUser {
   userId: string;
@@ -12,6 +18,21 @@ export interface CreatedUser {
 @Injectable({ providedIn: 'root' })
 export class AdminUserService {
   private readonly http = inject(HttpClient);
+
+  listUsers(params?: AdminUserListParams): Observable<PageResponse<AdminUserResponse>> {
+    let httpParams = new HttpParams();
+    if (params?.query) httpParams = httpParams.set('query', params.query);
+    if (params?.page !== undefined) httpParams = httpParams.set('page', String(params.page));
+    if (params?.size !== undefined) httpParams = httpParams.set('size', String(params.size));
+
+    return this.http.get<PageResponse<AdminUserResponse>>('/api/v1/users', {
+      params: httpParams,
+    });
+  }
+
+  updateUser(userId: string, payload: UpdateAdminUserRequest): Observable<AdminUserResponse> {
+    return this.http.put<AdminUserResponse>(`/api/v1/users/${userId}`, payload);
+  }
 
   register(payload: RegisterRequest): Observable<CreatedUser> {
     return this.http.post<Record<string, unknown>>('/api/v1/auth/register', payload).pipe(

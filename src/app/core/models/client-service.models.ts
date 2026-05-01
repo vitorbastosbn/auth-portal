@@ -78,3 +78,15 @@ export interface ClientUserListParams {
   page?: number;
   size?: number;
 }
+
+export interface AssignableUserResponse {
+  userId: string;
+  username: string;
+  email: string;
+}
+
+export interface AssignableUserListParams {
+  query?: string;
+  page?: number;
+  size?: number;
+}

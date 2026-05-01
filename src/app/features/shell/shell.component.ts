@@ -37,6 +37,7 @@ export class ShellComponent {
   readonly navItems = [
     { label: 'Dashboard', icon: 'dashboard', route: '/dashboard' },
     { label: 'Serviços', icon: 'api', route: '/client-services' },
+    { label: 'Usuários', icon: 'group', route: '/users' },
   ];
 
   toggleSidenav(): void {

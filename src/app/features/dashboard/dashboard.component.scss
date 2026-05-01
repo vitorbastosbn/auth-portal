@@ -100,6 +100,60 @@
   }
 }
 
+.quick-actions-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+.quick-action-card {
+  cursor: pointer;
+
+  mat-card-content {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 16px;
+  }
+}
+
+.quick-action-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &.users {
+    background: #e3f2fd;
+
+    mat-icon {
+      color: #1565c0;
+    }
+  }
+}
+
+.quick-action-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.quick-action-title {
+  font-weight: 600;
+}
+
+.quick-action-desc {
+  color: var(--mat-sys-on-surface-variant);
+  font-size: 13px;
+}
+
+.quick-action-arrow {
+  color: var(--mat-sys-on-surface-variant);
+}
+
 .empty-card mat-card-content {
   display: flex;
   flex-direction: column;

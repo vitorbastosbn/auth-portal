@@ -4,10 +4,26 @@
   <form [formGroup]="form" novalidate>
     @if (!isEdit) {
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>ID do Usuário</mat-label>
-        <input matInput formControlName="userId" placeholder="UUID do usuário" />
+        <mat-label>Usuário</mat-label>
+        <input
+          matInput
+          [formControl]="userSearch"
+          [matAutocomplete]="userAutocomplete"
+          placeholder="Digite nome ou e-mail"
+        />
+        @if (loadingUsers()) {
+          <mat-spinner matSuffix diameter="18" />
+        }
+        <mat-autocomplete #userAutocomplete="matAutocomplete" (optionSelected)="selectUser($event)">
+          @for (user of userOptions(); track user.userId) {
+            <mat-option [value]="user.userId">{{ user.username }} ({{ user.email }})</mat-option>
+          }
+        </mat-autocomplete>
         @if (form.controls.userId.hasError('required') && form.controls.userId.touched) {
-          <mat-error>ID do usuário é obrigatório</mat-error>
+          <mat-error>Selecione um usuário da lista</mat-error>
+        }
+        @if (!loadingUsers() && userSearch.value && userOptions().length === 0) {
+          <mat-hint>Nenhum usuário disponível para este filtro.</mat-hint>
         }
       </mat-form-field>
     } @else {

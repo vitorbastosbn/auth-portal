@@ -37,6 +37,11 @@ export const routes: Routes = [
             './features/client-services/client-service-detail/client-service-detail.component'
           ).then((m) => m.ClientServiceDetailComponent),
       },
+      {
+        path: 'users',
+        loadComponent: () =>
+          import('./features/users/users.component').then((m) => m.UsersComponent),
+      },
     ],
   },
   {

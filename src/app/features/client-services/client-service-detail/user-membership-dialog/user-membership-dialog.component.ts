@@ -1,14 +1,23 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import {
+  MatAutocompleteModule,
+  MatAutocompleteSelectedEvent,
+} from '@angular/material/autocomplete';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatSelectModule } from '@angular/material/select';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { ClientServiceService } from '../../../../core/services/client-service.service';
-import { ClientUserMembershipResponse } from '../../../../core/models/client-service.models';
+import {
+  AssignableUserResponse,
+  ClientUserMembershipResponse,
+} from '../../../../core/models/client-service.models';
 
 interface DialogData {
   serviceId: string;
@@ -22,6 +31,7 @@ interface DialogData {
   imports: [
     ReactiveFormsModule,
     MatDialogModule,
+    MatAutocompleteModule,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -35,10 +45,14 @@ export class UserMembershipDialogComponent {
   private readonly fb = inject(FormBuilder);
   private readonly service = inject(ClientServiceService);
   private readonly dialogRef = inject(MatDialogRef<UserMembershipDialogComponent>);
+  private readonly destroyRef = inject(DestroyRef);
   readonly data: DialogData = inject(MAT_DIALOG_DATA);
 
   readonly loading = signal(false);
+  readonly loadingUsers = signal(false);
   readonly isEdit = !!this.data.membership;
+  readonly userOptions = signal<AssignableUserResponse[]>([]);
+  private suppressNextSearch = false;
 
   readonly form = this.fb.nonNullable.group({
     userId: [
@@ -48,6 +62,50 @@ export class UserMembershipDialogComponent {
     roles: [this.data.membership?.roles ?? ([] as string[]), [Validators.required]],
     active: [this.data.membership?.active ?? true],
   });
+
+  readonly userSearch = this.fb.nonNullable.control('');
+
+  constructor() {
+    if (this.isEdit) return;
+
+    this.userSearch.valueChanges
+      .pipe(debounceTime(300), distinctUntilChanged(), takeUntilDestroyed(this.destroyRef))
+      .subscribe((query) => {
+        if (this.suppressNextSearch) {
+          this.suppressNextSearch = false;
+          return;
+        }
+
+        this.form.controls.userId.setValue('');
+        this.searchAssignableUsers(query);
+      });
+  }
+
+  searchAssignableUsers(rawQuery: string): void {
+    const query = rawQuery.trim();
+
+    this.loadingUsers.set(true);
+    this.service.listAssignableUsers(this.data.serviceId, { query, page: 0, size: 10 }).subscribe({
+      next: (page) => {
+        this.userOptions.set(page.content);
+        this.loadingUsers.set(false);
+      },
+      error: () => {
+        this.userOptions.set([]);
+        this.loadingUsers.set(false);
+      },
+    });
+  }
+
+  selectUser(event: MatAutocompleteSelectedEvent): void {
+    const selectedUserId = event.option.value as string;
+    const selectedUser = this.userOptions().find((user) => user.userId === selectedUserId);
+    if (!selectedUser) return;
+
+    this.form.controls.userId.setValue(selectedUser.userId);
+    this.suppressNextSearch = true;
+    this.userSearch.setValue(`${selectedUser.username} (${selectedUser.email})`);
+  }
 
   submit(): void {
     if (this.form.invalid || this.loading()) return;
