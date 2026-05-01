@@ -56,6 +56,15 @@
       <button mat-icon-button (click)="toggleSidenav()" aria-label="Alternar menu">
         <mat-icon>menu</mat-icon>
       </button>
+      <span class="toolbar-spacer"></span>
+      <button
+        mat-icon-button
+        (click)="toggleTheme()"
+        [matTooltip]="isDarkMode() ? 'Ativar modo claro' : 'Ativar modo noturno'"
+        aria-label="Alternar tema"
+      >
+        <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+      </button>
     </mat-toolbar>
 
     <main class="shell-content">

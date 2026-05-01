@@ -8,6 +8,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../core/services/auth.service';
+import { ThemeService } from '../../core/services/theme.service';
 
 @Component({
   selector: 'app-shell',
@@ -29,7 +30,9 @@ import { AuthService } from '../../core/services/auth.service';
 })
 export class ShellComponent {
   private readonly authService = inject(AuthService);
+  private readonly themeService = inject(ThemeService);
   readonly currentUser = this.authService.currentUser;
+  readonly isDarkMode = this.themeService.isDarkMode;
   readonly sidenavOpened = signal(true);
 
   @ViewChild('sidenav') sidenav!: MatSidenav;
@@ -46,5 +49,9 @@ export class ShellComponent {
 
   logout(): void {
     this.authService.logout();
+  }
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
   }
 }

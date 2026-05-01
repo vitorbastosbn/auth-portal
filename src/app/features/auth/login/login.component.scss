@@ -1,9 +1,16 @@
 .login-container {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
   background: var(--mat-sys-surface-container-low);
+}
+
+.theme-toggle {
+  position: absolute;
+  top: 16px;
+  right: 16px;
 }
 
 .login-card {

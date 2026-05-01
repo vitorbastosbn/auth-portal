@@ -7,8 +7,10 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../core/services/auth.service';
+import { ThemeService } from '../../../core/services/theme.service';
 
 @Component({
   selector: 'app-login',
@@ -21,6 +23,7 @@ import { AuthService } from '../../../core/services/auth.service';
     MatButtonModule,
     MatIconModule,
     MatProgressSpinnerModule,
+    MatTooltipModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -30,6 +33,7 @@ export class LoginComponent {
   private readonly authService = inject(AuthService);
   private readonly router = inject(Router);
   private readonly snackBar = inject(MatSnackBar);
+  private readonly themeService = inject(ThemeService);
 
   readonly form = this.fb.nonNullable.group({
     username: ['', [Validators.required, Validators.minLength(1)]],
@@ -38,6 +42,11 @@ export class LoginComponent {
 
   readonly loading = signal(false);
   readonly hidePassword = signal(true);
+  readonly isDarkMode = this.themeService.isDarkMode;
+
+  toggleTheme(): void {
+    this.themeService.toggleTheme();
+  }
 
   submit(): void {
     if (this.form.invalid || this.loading()) return;

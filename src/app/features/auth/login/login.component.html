@@ -1,4 +1,14 @@
 <div class="login-container">
+  <button
+    mat-icon-button
+    class="theme-toggle"
+    (click)="toggleTheme()"
+    [matTooltip]="isDarkMode() ? 'Ativar modo claro' : 'Ativar modo noturno'"
+    aria-label="Alternar tema"
+  >
+    <mat-icon>{{ isDarkMode() ? 'light_mode' : 'dark_mode' }}</mat-icon>
+  </button>
+
   <mat-card class="login-card" appearance="outlined">
     <mat-card-header>
       <div class="login-header">

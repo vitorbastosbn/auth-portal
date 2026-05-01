@@ -89,6 +89,10 @@
   z-index: 10;
 }
 
+.toolbar-spacer {
+  flex: 1;
+}
+
 .shell-content {
   padding: 24px;
   overflow-y: auto;
